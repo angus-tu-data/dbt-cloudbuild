@@ -1,39 +1,38 @@
 steps:
-  # 1️⃣ Install dbt
-  - name: python:3.10
-    id: Install dbt
-    entrypoint: bash
+  - name: 'python:3.10'
+    id: 'Install dbt'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - |
         pip install --upgrade pip
         pip install dbt-bigquery
 
-  # 2️⃣ Authenticate GCP using Secret Manager
-  - name: gcr.io/cloud-builders/gcloud
-    id: Authenticate GCP
-    entrypoint: bash
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Authenticate GCP'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - |
-        # 取得 Secret 並寫入臨時檔案
-        gcloud secrets versions access 1 \
-          --secret="DBT_PROD_KEY" > /tmp/prod-key.json
+        echo $DBT_PROD_KEY_JSON > /tmp/prod-key.json
         export DBT_KEYFILE=/tmp/prod-key.json
-        gcloud auth activate-service-account --key-file="$DBT_KEYFILE"
+        gcloud auth activate-service-account --key-file=$DBT_KEYFILE
 
-  # 3️⃣ dbt debug
-  - name: python:3.10
-    id: dbt debug
-    entrypoint: bash
+  - name: 'python:3.10'
+    id: 'dbt debug'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - dbt debug --target prod
 
-  # 4️⃣ dbt build
-  - name: python:3.10
-    id: dbt build
-    entrypoint: bash
+  - name: 'python:3.10'
+    id: 'dbt build'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - dbt build --target prod
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1
+      env: DBT_PROD_KEY_JSON
