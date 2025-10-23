@@ -39,4 +39,4 @@ steps:
 
 secrets:
   - secretEnv:
-      DBT_PROD_KEY_JSON: 'projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1'
+      DBT_PROD_KEY_JSON: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1
