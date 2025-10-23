@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: stats_G1_24M11
+    description: "Stats of member with phone suffix = 1 in Nov, 2024"
+    columns:
+      - name: second_last_digit
+        tests:
+          - not_null
+          - unique
+      - name: counts

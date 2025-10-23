@@ -1,0 +1,34 @@
+version: 2
+
+sources:
+  - name: dataform
+    tables:
+      - name: member
+      
+models:
+  - name: member_G1
+    description: "Member with phone suffix = 1"
+    columns:
+      - name: MID
+        tests:
+          - not_null
+          - unique
+      - name: phones
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+  - name: member_P221
+    description: "Member with phone suffix = 221"
+    columns:
+      - name: MID
+        tests:
+          - not_null
+          - unique
+      - name: phones
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null

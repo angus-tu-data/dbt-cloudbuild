@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: stats_G1
+    description: "Stats of member with phone suffix = 1"
+    columns:
+      - name: month_date
+        tests:
+          - not_null
+      - name: second_last_digit
+        tests:
+          - not_null
+      - name: counts
