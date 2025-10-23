@@ -51,7 +51,7 @@ steps:
 # ----------------------------------------------------------------------
 # 密鑰配置 (Secrets Configuration)
 # ----------------------------------------------------------------------
-secrets:
-  - secretEnv:
-      # 環境變數名稱      : Secret Manager 資源路徑
-      DBT_PROD_KEY_JSON: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1
+availableSecrets:
+  secretManager:
+    - versionName: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1
+      env: DBT_PROD_KEY_JSON
