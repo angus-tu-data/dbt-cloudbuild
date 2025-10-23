@@ -1,49 +1,57 @@
-# ============================
-# Cloud Build for dbt prod
-# Project: tw-rd-data-angus-tu
-# ============================
+# ----------------------------------------------------------------------
+# Cloud Build Configuration File
+# ----------------------------------------------------------------------
 
 steps:
-  # 1️⃣ Install dbt
-  - name: python:3.10
-    id: Install dbt
-    entrypoint: bash
+  # 1. 安裝 dbt-bigquery
+  - name: 'python:3.10'
+    id: 'Install dbt'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - |
         pip install --upgrade pip
         pip install dbt-bigquery
 
-  # 2️⃣ Authenticate with GCP using Secret Manager key
-  - name: gcr.io/cloud-builders/gcloud
-    id: Authenticate GCP
-    entrypoint: bash
+  # 2. 透過服務帳戶金鑰 JSON 進行 GCP 認證
+  #    Cloud Build 會自動將 Secret Manager 的值注入到 DBT_PROD_KEY_JSON 變數中
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Authenticate GCP'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - |
-        echo "$DBT_PROD_KEY_JSON" > /tmp/prod-key.json
+        # 1. 將 Service Account Key JSON 寫入臨時檔案
+        echo $DBT_PROD_KEY_JSON > /tmp/prod-key.json
+        
+        # 2. 設定 DBT_KEYFILE 變數 (如果 dbt 需要這個路徑)
+        #    注意: dbt 通常透過 profiles.yml 設定 keyfile，這裡可能只是為了 gcloud 認證
         export DBT_KEYFILE=/tmp/prod-key.json
-        gcloud auth activate-service-account --key-file="$DBT_KEYFILE"
+        
+        # 3. 透過 JSON 金鑰檔案啟用服務帳戶
+        gcloud auth activate-service-account --key-file=$DBT_KEYFILE
 
-  # 3️⃣ dbt debug
-  - name: python:3.10
-    id: dbt debug
-    entrypoint: bash
+  # 3. 執行 dbt debug 檢查連線
+  - name: 'python:3.10'
+    id: 'dbt debug'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
+      # 請確保您已在 profiles.yml 中設定 prod target
       - dbt debug --target prod
 
-  # 4️⃣ dbt build
-  - name: python:3.10
-    id: dbt build
-    entrypoint: bash
+  # 4. 執行 dbt build
+  - name: 'python:3.10'
+    id: 'dbt build'
+    entrypoint: 'bash'
     args:
-      - -c
+      - '-c'
       - dbt build --target prod
 
-# ============================
-# Secrets
-# ============================
+# ----------------------------------------------------------------------
+# 密鑰配置 (Secrets Configuration)
+# ----------------------------------------------------------------------
 secrets:
   - secretEnv:
+      # 環境變數名稱      : Secret Manager 資源路徑
       DBT_PROD_KEY_JSON: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1
