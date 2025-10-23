@@ -4,7 +4,6 @@
 # ============================
 
 steps:
-  # 1. 安裝 dbt
   - name: 'python:3.10'
     id: 'Install dbt'
     entrypoint: 'bash'
@@ -14,7 +13,6 @@ steps:
         pip install --upgrade pip
         pip install dbt-bigquery
 
-  # 2. 取得 Service Account Key，並認證
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'Authenticate GCP'
     entrypoint: 'bash'
@@ -25,7 +23,6 @@ steps:
         export DBT_KEYFILE=/tmp/prod-key.json
         gcloud auth activate-service-account --key-file=$DBT_KEYFILE
 
-  # 3. 驗證 dbt 設定
   - name: 'python:3.10'
     id: 'dbt debug'
     entrypoint: 'bash'
@@ -33,7 +30,6 @@ steps:
       - '-c'
       - dbt debug --target prod
 
-  # 4. 執行 dbt build 部署到 prod
   - name: 'python:3.10'
     id: 'dbt build'
     entrypoint: 'bash'
@@ -41,9 +37,6 @@ steps:
       - '-c'
       - dbt build --target prod
 
-# ============================
-# 使用 Secret Manager 儲存 Service Account Key
-# ============================
 secrets:
   - secretEnv:
       DBT_PROD_KEY_JSON: 'projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/1'
