@@ -2,7 +2,7 @@
   
     
 
-    create or replace table `tw-rd-data-angus-tu`.`dbt_prod`.`member_G1`
+    create or replace table `tw-rd-data-angus-tu`.`dbt_cloud`.`member_G1`
       
     partition by date
     
@@ -16,6 +16,6 @@
 
 select *
 from `tw-rd-data-angus-tu`.`dataform`.`member`
-where phones like '%1'
+where phones like '%3'
     );
   

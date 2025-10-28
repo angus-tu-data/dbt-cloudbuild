@@ -1,6 +1,6 @@
 
 
-  create or replace view `tw-rd-data-angus-tu`.`dbt_prod`.`member_P221`
+  create or replace view `tw-rd-data-angus-tu`.`dbt_cloud`.`member_P221`
   OPTIONS()
   as  
 

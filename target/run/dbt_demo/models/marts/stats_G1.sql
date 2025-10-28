@@ -2,7 +2,7 @@
   
     
 
-    create or replace table `tw-rd-data-angus-tu`.`dbt_prod`.`stats_G1`
+    create or replace table `tw-rd-data-angus-tu`.`dbt_cloud`.`stats_G1`
       
     
     
@@ -13,7 +13,7 @@
        
 
 select date_trunc(date, month) month_date, substring(phones,9,1) second_last_digit, count(distinct MID) counts
-from `tw-rd-data-angus-tu`.`dbt_prod`.`member_G1` 
+from `tw-rd-data-angus-tu`.`dbt_cloud`.`member_G1` 
 group by month_date, second_last_digit
     );
   
