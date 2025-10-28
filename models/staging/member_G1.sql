@@ -12,4 +12,4 @@
 
 select *
 from {{source('dataform', 'member')}}
-where phones like '%4'
+where phones like '%3'
