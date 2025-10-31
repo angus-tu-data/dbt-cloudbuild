@@ -17,3 +17,6 @@ steps:
         pip install dbt-bigquery
         export DBT_KEYFILE=/workspace/dbt_key.json
         dbt run --profiles-dir .
+
+options:
+  logging: CLOUD_LOGGING_ONLY
