@@ -18,4 +18,4 @@ options:
 availableSecrets:
   secretManager:
     - versionName: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/latest
-      env: DBT_KEYFILE
+      env: DBT_KEY
