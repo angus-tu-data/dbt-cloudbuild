@@ -6,9 +6,15 @@ steps:
       - '-c'
       - |
         pip install --quiet dbt-bigquery
+
         # 將 Secret 寫成檔案
         echo "$_DBT_KEYFILE" | tr -d '\r' > /workspace/keyfile.json
         export DBT_KEYFILE=/workspace/keyfile.json
+
+        # debug: 確認檔案內容
+        cat $DBT_KEYFILE
+
+        # 執行 dbt
         dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
         dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
         dbt test --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
