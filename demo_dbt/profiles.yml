@@ -14,7 +14,7 @@ demo_dbt:
       dataset: dbt_prod
       job_execution_timeout_seconds: 300
       job_retries: 1
-      keyfile: '{{ env_var(''DBT_KEYFILE'') }}'
+      keyfile: '{{ env_var("DBT_KEYFILE") }}'
       location: asia-east1
       method: service-account
       priority: interactive
