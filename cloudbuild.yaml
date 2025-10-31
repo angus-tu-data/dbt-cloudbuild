@@ -6,10 +6,9 @@ steps:
       - -c
       - |
         pip install --quiet dbt-bigquery
-        # 把 Secret Manager 的 JSON 寫成檔案
         echo "$_DBT_KEY" | tr -d '\r' > /workspace/keyfile.json
         export DBT_KEYFILE=/workspace/keyfile.json
-        cat $DBT_KEYFILE  # 可以先驗證內容
+        cat $DBT_KEYFILE  
         dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
 
 options:
