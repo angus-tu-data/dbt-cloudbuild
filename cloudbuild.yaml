@@ -5,7 +5,6 @@ steps:
     args:
       - '-c'
       - |
-        printf "%s" "$DBT_KEYFILE" > /workspace/dbt_key.json
         pip install dbt-bigquery
         dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
         dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
