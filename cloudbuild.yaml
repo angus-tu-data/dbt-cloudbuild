@@ -1,36 +1,19 @@
 steps:
-  - name: 'python:3.11-slim'
-    entrypoint: bash
-    secretEnv: ['_DBT_KEYFILE']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
     args:
       - '-c'
       - |
-        # 1️⃣ Debug 環境變數是否有拿到 Secret
-        echo "=== DEBUG: _DBT_KEYFILE first 100 chars ==="
-        echo "${_DBT_KEYFILE:0:100}"
+        echo "Export DBT keyfile from Secret Manager"
+        export DBT_KEYFILE=$(gcloud secrets versions access latest \
+          --secret="DBT_PROD_KEY")
+        echo "$DBT_KEYFILE" > /workspace/dbt_key.json
 
-        # 2️⃣ 將 Secret 寫成 JSON 檔案
-        echo "$_DBT_KEYFILE" | tr -d '\r' | sed 's/\\n/\n/g' > /workspace/dbt_keyfile.json
-
-        # 3️⃣ 檢查檔案內容前 15 行
-        echo "=== DEBUG: first 15 lines of dbt_keyfile.json ==="
-        head -n 15 /workspace/dbt_keyfile.json
-
-        # 4️⃣ export 給 dbt 使用
-        export DBT_KEYFILE=/workspace/dbt_keyfile.json
-
-        # 5️⃣ 安裝 dbt-bigquery
-        pip install --no-cache-dir dbt-bigquery
-
-        # 6️⃣ dbt 執行流程
-        dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
-        dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
-        dbt test --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
-
-options:
-  logging: CLOUD_LOGGING_ONLY
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/latest
-      env: _DBT_KEYFILE
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install dbt-bigquery
+        export DBT_KEYFILE=/workspace/dbt_key.json
+        dbt run --profiles-dir .
