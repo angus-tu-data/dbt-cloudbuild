@@ -8,7 +8,7 @@ steps:
         pip install --quiet dbt-bigquery
 
         # 將 Secret 寫成檔案
-        echo "$_DBT_KEYFILE" | tr -d '\r' > /workspace/keyfile.json
+        echo "$_DBT_KEYFILE" | tr -d '\r' | sed 's/\\n/\n/g'> /workspace/keyfile.json
         export DBT_KEYFILE=/workspace/keyfile.json
 
 
