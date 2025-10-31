@@ -1,5 +1,5 @@
 steps:
-  - name: 'gcr.io/cloud-builders/python'
+  - name: 'gcb.io/cloud-builders/python'
     entrypoint: bash
     secretEnv: ['DBT_KEYFILE']
     args:
