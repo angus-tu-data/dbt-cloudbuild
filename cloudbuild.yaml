@@ -6,6 +6,9 @@ steps:
       - '-c'
       - |
         pip install dbt-bigquery
+        echo "$DBT_KEYFILE" | tr -d '\r' > /workspace/keyfile.json
+        export DBT_KEYFILE=/workspace/keyfile.json
+        cat $DBT_KEYFILE
         dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
         dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
         dbt test --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
