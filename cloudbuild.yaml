@@ -1,7 +1,7 @@
 steps:
   - name: 'python:3.11-slim'
     entrypoint: bash
-    secretEnv: ['DBT_KEYFILE']
+    secretEnv: ['DBT_KEY']
     args:
       - '-c'
       - |
