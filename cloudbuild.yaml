@@ -1,11 +1,11 @@
 steps:
   - name: 'python:3.11-slim'
     entrypoint: bash
-    secretEnv: ['DBT_PROD_SECRET']
+    secretEnv: ['DBT_KEYFILE']
     args:
       - '-c'
       - |
-        printf "%s" "$DBT_PROD_SECRET" > /workspace/dbt_key.json
+        printf "%s" "$DBT_KEYFILE" > /workspace/dbt_key.json
         pip install dbt-bigquery
         dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
         dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
@@ -17,4 +17,4 @@ options:
 availableSecrets:
   secretManager:
     - versionName: projects/tw-rd-data-angus-tu/secrets/DBT_PROD_KEY/versions/latest
-      env: DBT_PROD_SECRET
+      env: DBT_KEYFILE
