@@ -11,8 +11,6 @@ steps:
         echo "$_DBT_KEYFILE" | tr -d '\r' > /workspace/keyfile.json
         export DBT_KEYFILE=/workspace/keyfile.json
 
-        # debug: 確認檔案內容
-        cat $DBT_KEYFILE
 
         # 執行 dbt
         dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
