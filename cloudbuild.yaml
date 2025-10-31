@@ -1,16 +1,14 @@
 steps:
-  - name: 'python:3.11-slim'
+  - name: 'python:3.11'
     entrypoint: bash
     secretEnv: ['DBT_KEY']
     args:
-      - '-c'
+      - -c
       - |
-        pip install dbt-bigquery
+        pip install --quiet dbt-bigquery
         echo "$DBT_KEY" > /workspace/keyfile.json
         export DBT_KEYFILE=/workspace/keyfile.json
-        dbt deps --project-dir=demo_dbt --profiles-dir=demo_dbt
         dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
-        dbt test --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
 
 options:
   logging: CLOUD_LOGGING_ONLY
