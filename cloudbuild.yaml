@@ -1,22 +1,24 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "Export DBT keyfile from Secret Manager"
-        export DBT_KEYFILE=$(gcloud secrets versions access latest \
-          --secret="DBT_PROD_KEY")
-        echo "$DBT_KEYFILE" > /workspace/dbt_key.json
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "Fetching DBT service account key from Secret Manager"
+      gcloud secrets versions access latest \
+        --secret="DBT_PROD_KEY" > /workspace/dbt_key.json
 
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        pip install dbt-bigquery
-        export DBT_KEYFILE=/workspace/dbt_key.json
-        dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
+- name: 'python:3.11'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      export _DBT_KEYFILE=/workspace/dbt_key.json
+
+      pip install --no-cache-dir dbt-bigquery
+      dbt --version
+
+      dbt run --project-dir=demo_dbt --profiles-dir=demo_dbt --target prod
 
 options:
   logging: CLOUD_LOGGING_ONLY
