@@ -1,6 +1,6 @@
-name: 'dbt_demo'
+name: 'demo_dbt'
 version: '1.0.0'
-profile: 'dbt_demo' # configures "profile.yml" 
+profile: 'demo_dbt' # configures "profile.yml" 
 
 # These configurations specify where dbt should look for different types of files.
 model-paths: ["models"]
@@ -17,7 +17,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # Configuring models
 models:
-  dbt_demo:
+  demo_dbt:
     staging:
       +materialized: table
       #+tags: ['staging']
